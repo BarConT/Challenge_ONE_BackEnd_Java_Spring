@@ -1,13 +1,13 @@
-package com.one.alura.topico;
+package com.one.alura.foro;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class TopicoApplication {
+public class ForoApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TopicoApplication.class, args);
+		SpringApplication.run(ForoApplication.class, args);
 	}
 
 }
