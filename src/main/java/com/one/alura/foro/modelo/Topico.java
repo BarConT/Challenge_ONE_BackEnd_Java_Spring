@@ -1,5 +1,6 @@
 package com.one.alura.foro.modelo;
 
+import com.one.alura.foro.dto.DatosActualizarTopico;
 import com.one.alura.foro.dto.DatosRegistroTopico;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -28,10 +29,26 @@ public class Topico {
     @Enumerated(EnumType.STRING)
     private Curso curso;
 
-    public Topico(DatosRegistroTopico datosRegistroTopico) {
-        this.titulo = datosRegistroTopico.titulo();
-        this.mensaje = datosRegistroTopico.mensaje();
-        this.autor = datosRegistroTopico.autor();
-        this.curso = datosRegistroTopico.curso();
+    public Topico(DatosRegistroTopico datosTopico) {
+        this.titulo = datosTopico.titulo();
+        this.mensaje = datosTopico.mensaje();
+        this.autor = datosTopico.autor();
+        this.curso = datosTopico.curso();
+    }
+
+    public void actualizar(DatosActualizarTopico datosActualizarTopico) {
+        if (datosActualizarTopico.titulo()!=null) {
+            this.titulo = datosActualizarTopico.titulo();
+        }
+        if (datosActualizarTopico.mensaje()!=null) {
+            this.mensaje = datosActualizarTopico.mensaje();
+        }
+        if (datosActualizarTopico.curso()!=null) {
+            this.curso = datosActualizarTopico.curso();
+        }
+        if (datosActualizarTopico.estatus()!=null) {
+            this.estatus = datosActualizarTopico.estatus();
+        }
+
     }
 }
