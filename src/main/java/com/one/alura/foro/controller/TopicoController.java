@@ -36,7 +36,7 @@ public class TopicoController {
 
     @PutMapping
     @Transactional
-    public void actualizarTopico(@RequestBody DatosActualizarTopico datosActualizarTopico) {
+    public void actualizarTopico(@RequestBody @Valid DatosActualizarTopico datosActualizarTopico) {
         Topico topico = topicoRepository.getReferenceById(datosActualizarTopico.id());
         topico.actualizar(datosActualizarTopico);
     }
