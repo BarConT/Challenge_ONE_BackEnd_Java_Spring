@@ -1,18 +1,15 @@
 package com.one.alura.foro.dto;
 
-import com.one.alura.foro.modelo.Curso;
+import com.one.alura.foro.modelo.Usuario;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record DatosRegistroTopico(
-        @NotBlank
-        String titulo,
+public record DatosRegistroRespuesta(
         @NotBlank
         String mensaje,
         @NotNull
-        Long usuario_id,
+        Long id_usuario,
         @NotNull
-        Curso curso
+        Long id_topico
         ) {
-
 }

@@ -14,7 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -43,8 +42,7 @@ public class TopicoController {
 
     @GetMapping ("/{id}")
     public Topico listarTopicoPorId(@PathVariable Long id) {
-        Topico topico = topicoRepository.findById(id).orElse(null);
-        return topico;
+        return topicoRepository.findById(id).orElse(null);
     }
 
     @PutMapping

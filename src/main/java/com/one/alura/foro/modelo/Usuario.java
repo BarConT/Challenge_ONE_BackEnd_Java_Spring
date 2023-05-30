@@ -27,6 +27,8 @@ public class Usuario {
     @OneToMany(mappedBy = "usuario")
     @JsonIgnore
     private List<Topico> topicos;
+    @OneToMany(mappedBy = "usuario")
+    private List<Respuesta> respuestas;
 
     public Usuario(DatosRegistroUsuario datosRegistroUsuario) {
         this.nombre = datosRegistroUsuario.nombre();

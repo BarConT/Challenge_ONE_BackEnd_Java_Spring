@@ -1,5 +1,6 @@
 package com.one.alura.foro.modelo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.one.alura.foro.dto.DatosActualizarTopico;
 import com.one.alura.foro.dto.DatosRegistroTopico;
 import jakarta.persistence.*;
@@ -9,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Table(name = "topicos")
 @Entity
@@ -25,12 +27,13 @@ public class Topico {
     private LocalDateTime fechaCreacion = LocalDateTime.now();
     @Enumerated(EnumType.STRING)
     private StatusTopico estatus = StatusTopico.NO_RESPONDIDO;
-//    private String autor;
     @Enumerated(EnumType.STRING)
     private Curso curso;
     @ManyToOne
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
+    @OneToMany(mappedBy = "topico", cascade = CascadeType.ALL)
+    private List<Respuesta> respuestas;
 
     public Topico(DatosRegistroTopico datosRegistroTopico, Usuario usuario) {
         this.titulo = datosRegistroTopico.titulo();
