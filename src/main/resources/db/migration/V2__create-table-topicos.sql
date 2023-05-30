@@ -4,7 +4,8 @@ CREATE TABLE topicos(
     mensaje VARCHAR(100) NOT NULL UNIQUE,
     fecha_creacion DATE NOT NULL,
     estatus VARCHAR(100) NOT NULL,
-    autor VARCHAR(100) NOT NULL,
     curso VARCHAR(100) NOT NULL,
-    PRIMARY KEY(id)
+    usuario_id BIGINT NOT NULL,
+    PRIMARY KEY(id),
+    FOREIGN KEY (usuario_id) REFERENCES usuarios (id)
 );

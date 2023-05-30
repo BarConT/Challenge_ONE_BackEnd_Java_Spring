@@ -25,15 +25,18 @@ public class Topico {
     private LocalDateTime fechaCreacion = LocalDateTime.now();
     @Enumerated(EnumType.STRING)
     private StatusTopico estatus = StatusTopico.NO_RESPONDIDO;
-    private String autor;
+//    private String autor;
     @Enumerated(EnumType.STRING)
     private Curso curso;
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
 
-    public Topico(DatosRegistroTopico datosTopico) {
-        this.titulo = datosTopico.titulo();
-        this.mensaje = datosTopico.mensaje();
-        this.autor = datosTopico.autor();
-        this.curso = datosTopico.curso();
+    public Topico(DatosRegistroTopico datosRegistroTopico, Usuario usuario) {
+        this.titulo = datosRegistroTopico.titulo();
+        this.mensaje = datosRegistroTopico.mensaje();
+        this.curso = datosRegistroTopico.curso();
+        this.usuario = usuario;
     }
 
     public void actualizar(DatosActualizarTopico datosActualizarTopico) {
