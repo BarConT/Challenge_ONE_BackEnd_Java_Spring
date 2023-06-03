@@ -1,8 +1,8 @@
 package com.one.alura.foro.modelo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.one.alura.foro.dto.DatosActualizarUsuario;
-import com.one.alura.foro.dto.DatosRegistroUsuario;
+import com.one.alura.foro.dto.usuario.DatosActualizarUsuario;
+import com.one.alura.foro.dto.usuario.DatosRegistroUsuario;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -24,10 +24,10 @@ public class Usuario {
     private String nombre;
     private String email;
     private String contrasenia;
-    @OneToMany(mappedBy = "usuario")
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<Topico> topicos;
-    @OneToMany(mappedBy = "usuario")
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.REMOVE)
     private List<Respuesta> respuestas;
 
     public Usuario(DatosRegistroUsuario datosRegistroUsuario) {
@@ -43,5 +43,10 @@ public class Usuario {
         if (datosActualizarUsuario.contrasenia()!=null) {
             this.contrasenia = datosActualizarUsuario.contrasenia();
         }
+    }
+
+    public void actualizarSolucion(Respuesta respuesta, Topico topico) {
+        respuesta.setSolucion(true);
+        topico.setEstatus(StatusTopico.SOLUCIONADO);
     }
 }

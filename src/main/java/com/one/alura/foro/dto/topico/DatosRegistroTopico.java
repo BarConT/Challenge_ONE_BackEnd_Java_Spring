@@ -1,6 +1,5 @@
-package com.one.alura.foro.dto;
+package com.one.alura.foro.dto.topico;
 
-import com.one.alura.foro.modelo.Curso;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -12,7 +11,6 @@ public record DatosRegistroTopico(
         @NotNull
         Long usuario_id,
         @NotNull
-        Curso curso
+        Long curso_id
         ) {
-
 }

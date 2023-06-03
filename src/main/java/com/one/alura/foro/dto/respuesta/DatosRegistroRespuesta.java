@@ -1,6 +1,5 @@
-package com.one.alura.foro.dto;
+package com.one.alura.foro.dto.respuesta;
 
-import com.one.alura.foro.modelo.Usuario;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 

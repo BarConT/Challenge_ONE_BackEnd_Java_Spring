@@ -1,8 +1,9 @@
 package com.one.alura.foro.controller;
 
-import com.one.alura.foro.dto.DatosActualizarRespuesta;
-import com.one.alura.foro.dto.DatosListarRespuestas;
-import com.one.alura.foro.dto.DatosRegistroRespuesta;
+import com.one.alura.foro.dto.respuesta.DatosActualizarRespuesta;
+import com.one.alura.foro.dto.respuesta.DatosListarRespuestas;
+import com.one.alura.foro.dto.respuesta.DatosRegistroRespuesta;
+import com.one.alura.foro.dto.respuesta.RespuestaDTO;
 import com.one.alura.foro.modelo.Respuesta;
 import com.one.alura.foro.modelo.Topico;
 import com.one.alura.foro.modelo.Usuario;
@@ -32,6 +33,11 @@ public class RespuestaController {
         return respuestaRepository.findAll().stream().map(DatosListarRespuestas::new).toList();
     }
 
+    @GetMapping ("/{id}")
+    public List<RespuestaDTO> listarRespuestaPorTopico(@PathVariable Long id) {
+        return respuestaRepository.findByTopicoId(id).stream().map(RespuestaDTO::new).toList();
+    }
+
     @PostMapping
     public void registrarRespuesta(@RequestBody @Valid DatosRegistroRespuesta datosRegistroRespuesta) {
         Optional<Usuario> optionalUsuario = usuarioRepository.findById(datosRegistroRespuesta.id_usuario());
@@ -57,4 +63,5 @@ public class RespuestaController {
         Respuesta respuesta = respuestaRepository.getReferenceById(id);
         respuestaRepository.delete(respuesta);
     }
+
 }

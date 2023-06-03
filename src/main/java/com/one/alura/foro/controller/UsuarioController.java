@@ -1,9 +1,12 @@
 package com.one.alura.foro.controller;
 
-import com.one.alura.foro.dto.DatosActualizarUsuario;
-import com.one.alura.foro.dto.DatosListarUsuario;
-import com.one.alura.foro.dto.DatosRegistroUsuario;
+import com.one.alura.foro.dto.usuario.DatosActualizarUsuario;
+import com.one.alura.foro.dto.usuario.DatosListarUsuarios;
+import com.one.alura.foro.dto.usuario.DatosRegistroUsuario;
+import com.one.alura.foro.modelo.Respuesta;
+import com.one.alura.foro.modelo.Topico;
 import com.one.alura.foro.modelo.Usuario;
+import com.one.alura.foro.repository.RespuestaRepository;
 import com.one.alura.foro.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -18,12 +21,14 @@ public class UsuarioController {
 
     @Autowired
     UsuarioRepository usuarioRepository;
+    @Autowired
+    RespuestaRepository respuestaRepository;
     @GetMapping
-    public List<DatosListarUsuario> listarUsuarios() {
+    public List<DatosListarUsuarios> listarUsuarios() {
         return usuarioRepository
                 .findAll()
                 .stream()
-                .map(DatosListarUsuario::new)
+                .map(DatosListarUsuarios::new)
                 .toList();
     }
 
@@ -34,7 +39,7 @@ public class UsuarioController {
 
     @PutMapping
     @Transactional
-    public void modificarUsuario(@RequestBody DatosActualizarUsuario datosActualizarUsuario) {
+    public void modificarUsuario(@RequestBody @Valid DatosActualizarUsuario datosActualizarUsuario) {
         Usuario usuario = usuarioRepository.getReferenceById(datosActualizarUsuario.id());
         usuario.actualizar(datosActualizarUsuario);
     }
@@ -43,5 +48,15 @@ public class UsuarioController {
     public void eliminarUsuario(@PathVariable Long id) {
         Usuario usuario = usuarioRepository.getReferenceById(id);
         usuarioRepository.delete(usuario);
+    }
+
+
+    @PostMapping("/{respuestaId}")
+    @Transactional
+    public void actualizarEstatusRespuesta(@PathVariable("respuestaId") Long respuestaId) {
+        Respuesta respuesta = respuestaRepository.getReferenceById(respuestaId);
+        Topico topico = respuesta.getTopico();
+        Usuario usuario = usuarioRepository.getReferenceById(respuesta.getId());
+        usuario.actualizarSolucion(respuesta, topico);
     }
 }

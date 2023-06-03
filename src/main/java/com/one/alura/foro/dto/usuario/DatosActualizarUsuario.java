@@ -1,5 +1,6 @@
-package com.one.alura.foro.dto;
+package com.one.alura.foro.dto.usuario;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record DatosActualizarUsuario(

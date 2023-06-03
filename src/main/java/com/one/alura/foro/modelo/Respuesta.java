@@ -1,19 +1,17 @@
 package com.one.alura.foro.modelo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.one.alura.foro.dto.DatosActualizarRespuesta;
-import com.one.alura.foro.dto.DatosRegistroRespuesta;
+import com.one.alura.foro.dto.respuesta.DatosActualizarRespuesta;
+import com.one.alura.foro.dto.respuesta.DatosRegistroRespuesta;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Table(name = "respuestas")
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
@@ -37,12 +35,14 @@ public class Respuesta {
         this.mensaje = datosRegistroRespuesta.mensaje();
         this.usuario = usuario;
         this.topico = topico;
+        this.topico.setEstatus(StatusTopico.NO_SOLUCIONADO);
     }
 
     public void acualizar(DatosActualizarRespuesta datosActualizarRespuesta) {
-        if(datosActualizarRespuesta.mensaje()!=null) {
+        if(datosActualizarRespuesta.mensaje()!=null && !datosActualizarRespuesta.mensaje().equals("")) {
             this.mensaje = datosActualizarRespuesta.mensaje();
         }
     }
+
 }
 

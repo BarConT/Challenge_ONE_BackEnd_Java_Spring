@@ -1,4 +1,4 @@
-package com.one.alura.foro.dto;
+package com.one.alura.foro.dto.usuario;
 
 import com.one.alura.foro.modelo.Topico;
 import com.one.alura.foro.modelo.Usuario;
@@ -6,8 +6,8 @@ import com.one.alura.foro.modelo.Usuario;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public record DatosListarUsuario(Long id, String nombre, String email, List<String> listaTopicos) {
-    public DatosListarUsuario(Usuario usuario) {
+public record DatosListarUsuarios(long id_usuario, String nombre, String email, List<String> listaTopicos) {
+    public DatosListarUsuarios(Usuario usuario) {
         this(
                 usuario.getId(),
                 usuario.getNombre(),

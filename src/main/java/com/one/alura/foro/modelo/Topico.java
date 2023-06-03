@@ -1,13 +1,9 @@
 package com.one.alura.foro.modelo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.one.alura.foro.dto.DatosActualizarTopico;
-import com.one.alura.foro.dto.DatosRegistroTopico;
+import com.one.alura.foro.dto.topico.DatosActualizarTopico;
+import com.one.alura.foro.dto.topico.DatosRegistroTopico;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,6 +11,7 @@ import java.util.List;
 @Table(name = "topicos")
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
@@ -27,7 +24,8 @@ public class Topico {
     private LocalDateTime fechaCreacion = LocalDateTime.now();
     @Enumerated(EnumType.STRING)
     private StatusTopico estatus = StatusTopico.NO_RESPONDIDO;
-    @Enumerated(EnumType.STRING)
+    @ManyToOne
+    @JoinColumn(name = "curso_id")
     private Curso curso;
     @ManyToOne
     @JoinColumn(name = "usuario_id")
@@ -35,26 +33,19 @@ public class Topico {
     @OneToMany(mappedBy = "topico", cascade = CascadeType.ALL)
     private List<Respuesta> respuestas;
 
-    public Topico(DatosRegistroTopico datosRegistroTopico, Usuario usuario) {
+    public Topico(DatosRegistroTopico datosRegistroTopico, Usuario usuario, Curso curso) {
         this.titulo = datosRegistroTopico.titulo();
         this.mensaje = datosRegistroTopico.mensaje();
-        this.curso = datosRegistroTopico.curso();
         this.usuario = usuario;
+        this.curso = curso;
     }
 
     public void actualizar(DatosActualizarTopico datosActualizarTopico) {
-        if (datosActualizarTopico.titulo()!=null) {
+        if (datosActualizarTopico.titulo()!=null && !datosActualizarTopico.titulo().equals("")) {
             this.titulo = datosActualizarTopico.titulo();
         }
-        if (datosActualizarTopico.mensaje()!=null) {
+        if (datosActualizarTopico.mensaje()!=null && !datosActualizarTopico.mensaje().equals("")) {
             this.mensaje = datosActualizarTopico.mensaje();
         }
-        if (datosActualizarTopico.curso()!=null) {
-            this.curso = datosActualizarTopico.curso();
-        }
-        if (datosActualizarTopico.estatus()!=null) {
-            this.estatus = datosActualizarTopico.estatus();
-        }
-
     }
 }
