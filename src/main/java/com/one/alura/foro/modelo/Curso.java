@@ -19,7 +19,7 @@ public class Curso {
     private Long id;
     private String nombre;
     private String categoria;
-    @OneToMany(mappedBy = "curso")
+    @OneToMany(mappedBy = "curso", cascade = CascadeType.REMOVE)
     private List<Topico> topicos;
 
     public Curso(DatosRegistroCurso datosRegistroCurso) {
