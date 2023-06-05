@@ -8,7 +8,12 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.Collection;
 import java.util.List;
 
 @Table(name = "usuarios")
@@ -17,7 +22,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Usuario {
+public class Usuario implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -33,7 +38,8 @@ public class Usuario {
     public Usuario(DatosRegistroUsuario datosRegistroUsuario) {
         this.nombre = datosRegistroUsuario.nombre();
         this.email = datosRegistroUsuario.email();
-        this.contrasenia = datosRegistroUsuario.contrasenia();
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        this.contrasenia = passwordEncoder.encode(datosRegistroUsuario.contrasenia());
     }
 
     public void actualizar(DatosActualizarUsuario datosActualizarUsuario) {
@@ -41,12 +47,43 @@ public class Usuario {
             this.nombre = datosActualizarUsuario.nombre();
         }
         if (datosActualizarUsuario.contrasenia()!=null) {
-            this.contrasenia = datosActualizarUsuario.contrasenia();
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            this.contrasenia = passwordEncoder.encode(datosActualizarUsuario.contrasenia());
         }
     }
 
-    public void actualizarSolucion(Respuesta respuesta, Topico topico) {
-        respuesta.setSolucion(true);
-        topico.setEstatus(StatusTopico.SOLUCIONADO);
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+    }
+
+    @Override
+    public String getPassword() {
+        return contrasenia;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

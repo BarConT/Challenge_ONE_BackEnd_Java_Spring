@@ -60,14 +60,4 @@ public class UsuarioController {
         usuarioRepository.delete(usuario);
         return ResponseEntity.noContent().build();
     }
-
-    @PostMapping("/respuesta/{respuestaId}")
-    @Transactional
-    public ResponseEntity actualizarEstatusRespuesta(@PathVariable("respuestaId") Long respuestaId) {
-        Respuesta respuesta = respuestaRepository.getReferenceById(respuestaId);
-        Topico topico = respuesta.getTopico();
-        Usuario usuario = usuarioRepository.getReferenceById(respuesta.getUsuario().getId());
-        usuario.actualizarSolucion(respuesta, topico);
-        return ResponseEntity.ok().build();
-    }
 }
