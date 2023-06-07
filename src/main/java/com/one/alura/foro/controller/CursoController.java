@@ -6,6 +6,8 @@ import com.one.alura.foro.domain.dto.curso.DatosRegistroCurso;
 import com.one.alura.foro.domain.dto.curso.DatosRespuestaCurso;
 import com.one.alura.foro.domain.modelo.Curso;
 import com.one.alura.foro.domain.repository.CursoRepository;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/cursos")
+@Tag(name = "Cursos")
 public class CursoController {
 
     @Autowired

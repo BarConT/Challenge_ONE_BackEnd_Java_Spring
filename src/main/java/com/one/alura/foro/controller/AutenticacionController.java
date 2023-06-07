@@ -4,6 +4,7 @@ import com.one.alura.foro.domain.dto.usuario.DatosAutenticacionUsuario;
 import com.one.alura.foro.domain.modelo.Usuario;
 import com.one.alura.foro.infra.security.DatosJWTtoken;
 import com.one.alura.foro.infra.security.TokenService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping ("/login")
+@Tag(name = "Iniciar Sesión")
 public class AutenticacionController {
 
     @Autowired

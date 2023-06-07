@@ -7,8 +7,6 @@ public record DatosRegistroRespuesta(
         @NotBlank
         String mensaje,
         @NotNull
-        Long id_usuario,
-        @NotNull
         Long id_topico
         ) {
 }

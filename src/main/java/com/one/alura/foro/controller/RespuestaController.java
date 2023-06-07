@@ -6,11 +6,13 @@ import com.one.alura.foro.domain.modelo.Topico;
 import com.one.alura.foro.domain.modelo.Usuario;
 import com.one.alura.foro.domain.repository.RespuestaRepository;
 import com.one.alura.foro.domain.repository.TopicoRepository;
-import com.one.alura.foro.domain.repository.UsuarioRepository;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -20,27 +22,24 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/respuestas")
+@Tag(name = "Respuestas")
 public class RespuestaController {
 
     @Autowired
     RespuestaRepository respuestaRepository;
     @Autowired
-    UsuarioRepository usuarioRepository;
-    @Autowired
     TopicoRepository topicoRepository;
 
     @PostMapping
-    public ResponseEntity<DatosRespuestaRespuesta> registrarRespuesta(@RequestBody @Valid DatosRegistroRespuesta datosRegistroRespuesta, UriComponentsBuilder uriComponentsBuilder) {
-        Optional<Usuario> optionalUsuario = usuarioRepository.findById(datosRegistroRespuesta.id_usuario());
+    public ResponseEntity<DatosRespuestaRespuesta> registrarRespuesta(@RequestBody @Valid DatosRegistroRespuesta datosRegistroRespuesta, UriComponentsBuilder uriComponentsBuilder, @AuthenticationPrincipal Usuario usuarioAutenticado) {
         Optional<Topico> opcionalTopico = topicoRepository.findById(datosRegistroRespuesta.id_topico());
-        if (optionalUsuario.isPresent() && opcionalTopico.isPresent()) {
-            Usuario usuario = optionalUsuario.get();
+        if (opcionalTopico.isPresent()) {
             Topico topico = opcionalTopico.get();
-            Respuesta respuesta = respuestaRepository.save(new Respuesta(datosRegistroRespuesta, usuario, topico));
+            Respuesta respuesta = respuestaRepository.save(new Respuesta(datosRegistroRespuesta, usuarioAutenticado, topico));
             URI url = uriComponentsBuilder.path("/respuestas/{id}").buildAndExpand(respuesta.getId()).toUri();
             return ResponseEntity.created(url).body(new DatosRespuestaRespuesta(respuesta));
         } else {
-            throw new IllegalArgumentException("El usuario con ID " + datosRegistroRespuesta.id_usuario() + " no existe");
+            throw new IllegalArgumentException("El Topico con ID " + datosRegistroRespuesta.id_topico() + " no existe");
         }
     }
 
@@ -62,15 +61,21 @@ public class RespuestaController {
 
     @PutMapping
     @Transactional
-    public ResponseEntity<RespuestaDTO> actualizarRespuesta(@RequestBody @Valid DatosActualizarRespuesta datosActualizarRespuesta) {
+    public ResponseEntity<RespuestaDTO> actualizarRespuesta(@RequestBody @Valid DatosActualizarRespuesta datosActualizarRespuesta, @AuthenticationPrincipal Usuario usuarioAutenticado) {
         Respuesta respuesta = respuestaRepository.getReferenceById(datosActualizarRespuesta.id());
+        if (!respuesta.getUsuario().equals(usuarioAutenticado)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         respuesta.acualizar(datosActualizarRespuesta);
         return ResponseEntity.ok(new RespuestaDTO(respuesta));
     }
 
     @DeleteMapping ("/{id}")
-    public ResponseEntity eliminarRespuesta(@PathVariable("id") long id) {
+    public ResponseEntity eliminarRespuesta(@PathVariable("id") long id, @AuthenticationPrincipal Usuario usuarioAutenticado) {
         Respuesta respuesta = respuestaRepository.getReferenceById(id);
+        if (!respuesta.getUsuario().equals(usuarioAutenticado)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         respuestaRepository.delete(respuesta);
         return ResponseEntity.noContent().build();
     }

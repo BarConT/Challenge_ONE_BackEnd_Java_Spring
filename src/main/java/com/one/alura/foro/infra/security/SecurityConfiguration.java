@@ -28,7 +28,24 @@ public class SecurityConfiguration {
             .and().authorizeHttpRequests()
             .requestMatchers(HttpMethod.POST, "/login")
             .permitAll()
-            .anyRequest()
+            .requestMatchers(HttpMethod.POST, "/usuarios")
+            .permitAll()
+                .requestMatchers(
+                        "/api/v1/auth/**",
+                        "/v2/api-docs",
+                        "/v3/api-docs",
+                        "/v3/api-docs/**",
+                        "/swagger-resources",
+                        "/swagger-resources/**",
+                        "/configuration/ui",
+                        "/configuration/security",
+                        "/swagger-ui/**",
+                        "/webjars/**",
+                        "/swagger-ui/index.html",
+                        "/foro-alura.html"
+                )
+                .permitAll()
+                .anyRequest()
             .authenticated()
             .and()
             .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
